@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  PackageName:
+    Type: String
+  BucketName:
+    Type: String
+
+Resources:
+
+  DemoApplication:
+    Type: AWS::ElasticBeanstalk::Application
+    Properties:
+      ApplicationName: TomcatApplication
+      Description: Demo application for port binding factor
+
+  ApplicationVersion:
+    Type: AWS::ElasticBeanstalk::ApplicationVersion
+    Properties:
+      ApplicationName: TomcatApplication
+      Description: "Latest application version"
+      SourceBundle:
+        S3Bucket: !Ref BucketName
+        S3Key: !Ref PackageName
+
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - "aws-elasticbeanstalk-ec2-role"
+
+  Environment:
+    Type: AWS::ElasticBeanstalk::Environment
+    Properties:
+      ApplicationName: TomcatApplication
+      Description: "Environment created by CloudFormation"
+      EnvironmentName: TomcatEnvironment
+      SolutionStackName: "64bit Amazon Linux 2 v4.1.5 running Tomcat 8.5 Corretto 8"
+      OptionSettings:
+        - Namespace: 'aws:autoscaling:launchconfiguration'
+          OptionName: IamInstanceProfile
+          Value: !Ref InstanceProfile
+

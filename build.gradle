@@ -29,6 +29,3 @@ test {
 war {
 	enabled = true
 }
-bootJar {
-	classifier = 'boot'
-}

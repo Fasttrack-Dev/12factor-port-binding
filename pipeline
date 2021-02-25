@@ -33,7 +33,7 @@ echo "Building binary"
 
 # package it
 echo "Packaging binary and extensions"
-mv  build/libs/*.war build/libs/ROOT.war
+mv -f build/libs/12factor-*.war build/libs/ROOT.war
 zip -j "$package_name" build/libs/*.war
 
 # stage it
